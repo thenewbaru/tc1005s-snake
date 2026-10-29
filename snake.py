@@ -1,3 +1,4 @@
+
 """Snake, classic arcade game.
 
 Exercises
@@ -7,8 +8,7 @@ Exercises
 3. How would you move the food?
 4. Change the snake to respond to mouse clicks.
 """
-
-from random import randrange
+from random import choice, randrange
 from turtle import *
 
 from freegames import square, vector
@@ -28,7 +28,14 @@ def inside(head):
     """Return True if head inside boundaries."""
     return -200 < head.x < 190 and -200 < head.y < 190
 
+def move_food():
+    """Mueve la comida un paso de 10 al azar sin salirse de la ventana."""
+    step = choice([vector(10, 0), vector(-10, 0), vector(0, 10), vector(0, -10)])
+    new_food = food.copy()
+    new_food.move(step)
 
+    if inside(new_food):
+        food.move(step)
 def move():
     """Move snake forward one segment."""
     head = snake[-1].copy()
@@ -47,7 +54,12 @@ def move():
         food.y = randrange(-15, 15) * 10
     else:
         snake.pop(0)
+    move_food()
+    move_food()
 
+    clear()
+    for body in snake:
+        ...
     clear()
 
     for body in snake:
