@@ -19,7 +19,9 @@ from freegames import square, vector
 food = vector(0, 0)
 snake = [vector(10, 0)]
 aim = vector(0, -10)
+# Allowed colors; red is excluded on purpose.
 COLORS = ['blue', 'green', 'orange', 'purple', 'brown']
+# Pick two different colors once per game.
 snake_color, food_color = sample(COLORS, 2)
 
 
