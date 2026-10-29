@@ -1,50 +1,62 @@
-
-"""Snake, classic arcade game.
-
-Exercises
-
-1. How do you make the snake faster or slower?
-2. How can you make the snake go around the edges?
-3. How would you move the food?
-4. Change the snake to respond to mouse clicks.
 """
+
+Juego de la Serpiente (Snake)
+Input: Teclas de dirección (Up, Down, Left, Right) para mover la serpiente.
+Process:
+  - Actualiza la posición de la serpiente cada 100ms.
+  - Verifica colisiones con los bordes o con su propio cuerpo.
+  - Si come la comida, crece; si no, avanza.
+  - Mueve la comida de forma aleatoria un paso a la vez.
+Output: Renderizado gráfico del juego en la ventana de Turtle.
+"""
+
 from random import choice, randrange, sample
 from turtle import (
     clear, done, hideturtle, listen, onkey,
     ontimer, setup, tracer, update,
 )
-
 from freegames import square, vector
 
 food = vector(0, 0)
 snake = [vector(10, 0)]
 aim = vector(0, -10)
-# Allowed colors; red is excluded on purpose.
-COLORS = ['blue', 'green', 'orange', 'purple', 'brown']
-# Pick two different colors once per game.
-snake_color, food_color = sample(COLORS, 2)
+
+colors = ['blue', 'purple', 'orange', 'yellow', 'pink']
+snake_color, food_color = sample(colors, 2)
 
 
 def change(x, y):
-    """Change snake direction."""
+    """
+    Cambia la dirección de la serpiente.
+    Input: Coordenadas x, y de la nueva dirección.
+    Process: Asigna las nuevas coordenadas al vector 'aim'.
+    Output: Ninguno.
+    """
     aim.x = x
     aim.y = y
 
 
 def inside(head):
-    """Return True if head inside boundaries."""
+    """
+    Verifica si la cabeza está dentro de los límites.
+    Input: Vector 'head' con las coordenadas actuales.
+    Process: Comprueba que x e y estén entre -200 y 190.
+    Output: Booleano True si está dentro, False si no.
+    """
     return -200 < head.x < 190 and -200 < head.y < 190
 
-def move_food():
-    """Mueve la comida un paso de 10 al azar sin salirse de la ventana."""
-    step = choice([vector(10, 0), vector(-10, 0), vector(0, 10), vector(0, -10)])
-    new_food = food.copy()
-    new_food.move(step)
 
-    if inside(new_food):
-        food.move(step)
 def move():
-    """Move snake forward one segment."""
+    """
+    Mueve la serpiente y la comida un segmento.
+    Input: Ninguno explícito (usa variables globales).
+    Process:
+      - Calcula la nueva posición de la cabeza.
+      - Valida colisiones.
+      - Actualiza la posición de la comida de forma aleatoria.
+      - Dibuja los elementos en pantalla.
+    Output: Renderizado en pantalla actualizado.
+    """
     head = snake[-1].copy()
     head.move(aim)
 
@@ -61,12 +73,22 @@ def move():
         food.y = randrange(-15, 15) * 10
     else:
         snake.pop(0)
-    move_food()
-    move_food()
 
-    clear()
-    for body in snake:
-        ...
+    # Movimiento aleatorio de la comida (1 paso a la vez)
+    food.x += choice([-10, 0, 10])
+    food.y += choice([-10, 0, 10])
+
+    # Mantener la comida dentro de los límites de la ventana
+    if food.x < -200:
+        food.x = -200
+    elif food.x > 190:
+        food.x = 190
+
+    if food.y < -200:
+        food.y = -200
+    elif food.y > 190:
+        food.y = 190
+
     clear()
 
     for body in snake:
